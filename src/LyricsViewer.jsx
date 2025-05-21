@@ -1,53 +1,52 @@
+
+  // You can later replace these with URL params if needed
+  //   const title = new URLSearchParams(window.location.search).get('title');
+//   const artist = new URLSearchParams(window.location.search).get('artist');
+
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import { Spin } from 'antd';
+import { LoadingOutlined } from '@ant-design/icons';
 
 const LyricsViewer = () => {
-  const [lyricsHtml, setLyricsHtml] = useState('');
+  const [iframeContent, setIframeContent] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(true);
 
-//   const title = new URLSearchParams(window.location.search).get('title');
-//   const artist = new URLSearchParams(window.location.search).get('artist');
-
-  const title = "Hello";
-  const artist = "Adele";
+  // const title = "Hello";
+  // const artist = "Adele";
+  const title = new URLSearchParams(window.location.search).get('title');
+  const artist = new URLSearchParams(window.location.search).get('artist');
 
   useEffect(() => {
     const fetchLyrics = async () => {
       try {
-        const query = `${title}`;
-        const searchResponse = await axios.get(`https://api.genius.com/search?q=${encodeURIComponent(query)}`, {
-          headers: {
-            Authorization: `Bearer ${import.meta.env.VITE_GENIUS_ACCESS_TOKEN}`,
-          },
+        const response = await axios.get(`${import.meta.env.VITE_API_URL}/auth/get-song-lyrics`, {
+          params: { title, artist },
         });
 
-        console.log("Reached here")
+        const fullHtml = `
+          <html>
+            <head>
+              <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+              <style>
+                body { margin: 0; padding: 0; font-family: sans-serif; }
+                .rg_embed_link { width: 100% !important; }
+              </style>
+            </head>
+            <body>
+              ${response.data.embed}
+            </body>
+          </html>
+        `;
 
-        const hit = searchResponse.data.response.hits.find(
-          (h) =>
-            h.result.title.toLowerCase() === title?.toLowerCase() &&
-            h.result.artist_names.toLowerCase().includes(artist?.toLowerCase())
-        );
+        setIframeContent(fullHtml);
 
-        if (!hit) {
-          setError('Lyrics not found');
-          return;
-        }
-
-        const songId = hit.result.id;
-        const songResponse = await axios.get(`https://api.genius.com/songs/${songId}`, {
-          headers: {
-            Authorization: `Bearer ${import.meta.env.VITE_GENIUS_ACCESS_TOKEN}`,
-          },
-        });
-
-        const embed = songResponse.data.response.song.embed_content;
-        setLyricsHtml(embed);
+        // Wait 5 seconds after iframe is set to stop the loader
+        setTimeout(() => setLoading(false), 5000);
       } catch (err) {
         console.error('Error fetching lyrics:', err);
         setError('Error fetching lyrics');
-      } finally {
         setLoading(false);
       }
     };
@@ -55,14 +54,20 @@ const LyricsViewer = () => {
     fetchLyrics();
   }, [title, artist]);
 
+  const loaderIcon = <LoadingOutlined style={{ fontSize: 48 }} spin />;
+
   return (
-    <div style={{ padding: 16 }}>
+    <div className="w-full min-h-screen bg-white flex justify-center items-center p-4">
       {loading ? (
-        <p>Loading...</p>
+        <Spin indicator={loaderIcon} tip="Loading lyrics..." className="text-center" />
       ) : error ? (
-        <p style={{ color: 'red' }}>{error}</p>
+        <p className="text-red-600 text-lg font-semibold">{error}</p>
       ) : (
-        <div dangerouslySetInnerHTML={{ __html: lyricsHtml }} />
+        <iframe
+          title="Lyrics Embed"
+          srcDoc={iframeContent}
+          className="w-full h-[90vh] border-none rounded-lg shadow-md"
+        />
       )}
     </div>
   );
