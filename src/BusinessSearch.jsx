@@ -8,23 +8,19 @@ export default function BusinessSearch() {
   const [loading, setLoading] = useState(false);
 
   const handleSearch = async (service, location) => {
-    setLoading(true);
-    try {
-      const response = await axios.get(
-        `https://cors-anywhere.herokuapp.com/https://maps.googleapis.com/maps/api/place/textsearch/json`,
-        {
-          params: {
-            query: `${service} in ${location}`,
-            key: import.meta.env.VITE_GOOGLE_API_KEY,
-          },
-        }
-      );
-      setResults(response.data.results || []);
-    } catch (error) {
-      console.error("Error fetching places:", error);
-    }
-    setLoading(false);
-  };
+  setLoading(true);
+  try {
+    const response = await axios.get(`${import.meta.env.VITE_API_URLX}/mails/business-search`, {
+      params: { service, location },
+    });
+    setResults(response.data.results || []);
+  } catch (error) {
+    console.error("Error fetching places:", error);
+  }
+  setLoading(false);
+};
+
+
 
   return (
     <div className="min-h-screen bg-gray-100">
