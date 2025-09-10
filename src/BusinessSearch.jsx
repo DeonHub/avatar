@@ -29,7 +29,7 @@ export default function BusinessSearch() {
   return (
     <div className="min-h-screen bg-gray-100">
       <h1 className="text-center text-3xl font-bold py-6 bg-blue-600 text-white">
-        Service Finder
+        Business Directory
       </h1>
       <SearchForm onSearch={handleSearch} />
       {loading ? (
