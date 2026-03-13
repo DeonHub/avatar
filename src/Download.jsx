@@ -17,7 +17,7 @@ export default function Download() {
     const redirectTimer = setTimeout(() => {
       if (isAndroid) window.location.href = ANDROID_LINK;
       if (isIOS) window.location.href = IOS_LINK;
-    }, 3000);
+    }, 1000);
 
     return () => {
       clearInterval(interval);
@@ -26,99 +26,97 @@ export default function Download() {
   }, []);
 
   return (
-    <div className="min-h-screen relative flex items-center justify-center px-6 py-12 bg-gradient-to-br from-indigo-50 via-white to-purple-50 overflow-hidden">
+    <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-purple-50 relative overflow-hidden py-20 lg:py-0">
 
-      {/* Animated Gradient Blobs */}
-      <div className="absolute w-96 h-96 bg-purple-300 opacity-30 rounded-full blur-3xl -top-20 -left-20 animate-pulse"></div>
-      <div className="absolute w-96 h-96 bg-indigo-300 opacity-30 rounded-full blur-3xl -bottom-20 -right-20 animate-pulse"></div>
+      {/* Background Glow */}
+      <div className="absolute w-[700px] h-[700px] bg-purple-300 opacity-30 rounded-full blur-3xl -top-40 -left-40"></div>
+      <div className="absolute w-[700px] h-[700px] bg-indigo-300 opacity-30 rounded-full blur-3xl -bottom-40 -right-40"></div>
 
-      {/* Main Card */}
-      <div className="relative z-10 max-w-6xl w-full bg-white/80 backdrop-blur-lg shadow-2xl rounded-3xl border border-white/30 p-8 md:p-14 flex flex-col md:flex-row items-center gap-12">
+      <div className="relative z-10 max-w-[1400px] mx-auto px-6 lg:px-10 min-h-screen flex items-center">
 
-        {/* LEFT SIDE */}
-        <div className="flex-1 text-center md:text-left">
+        <div className="grid lg:grid-cols-2 gap-12 items-center w-full">
 
-          {/* Logo */}
-          <div className="flex justify-center md:justify-start mb-6">
-            <img
-              src="/assets/app_logo.jpg"
-              alt="DAF Logo"
-              className="w-24 h-24 rounded-2xl shadow-lg"
-            />
-          </div>
+          {/* LEFT SIDE */}
+          <div>
 
-          {/* Title */}
-          <h1 className="text-4xl sm:text-5xl font-extrabold text-gray-900 leading-tight mb-5">
-            Connect with Africans
-            <br />
-            <span className="bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
-              Across the World
-            </span>
-          </h1>
-
-          {/* Subtitle */}
-          <p className="text-lg text-gray-600 mb-8 max-w-md mx-auto md:mx-0">
-            The Diaspora African Forum app connects Africans globally.
-            Network, share ideas, discover opportunities and stay informed.
-          </p>
-
-          {/* Store Buttons */}
-          <div className="flex flex-col sm:flex-row gap-4 justify-center md:justify-start">
-
-            <a
-              href={ANDROID_LINK}
-              className="flex items-center justify-center text-white rounded-xl hover:scale-105 transition shadow-md"
-            >
+            {/* Logo */}
+            <div className="flex items-center gap-4 mb-10">
               <img
-                src="https://upload.wikimedia.org/wikipedia/commons/7/78/Google_Play_Store_badge_EN.svg"
-                alt="Google Play"
-                className="h-16"
+                src="/assets/app_logo.jpg"
+                alt="DAF Logo"
+                className="size-28 rounded-xl shadow-md"
               />
-            </a>
-
-            <a
-              href={IOS_LINK}
-              className="flex items-center justify-center text-white rounded-xl hover:scale-105 transition shadow-md"
-            >
-              <img
-                src="https://developer.apple.com/assets/elements/badges/download-on-the-app-store.svg"
-                alt="App Store"
-                className="h-16"
-              />
-            </a>
-          </div>
-
-          {/* Countdown */}
-          {(isAndroid || isIOS) && (
-            <div className="mt-6 flex items-center justify-center md:justify-start gap-2 text-sm text-gray-500">
-              <div className="w-2 h-2 bg-green-500 rounded-full animate-ping"></div>
-              Redirecting to your app store in{" "}
-              <span className="font-semibold text-indigo-600">
-                {countdown}
-              </span>{" "}
-              seconds...
+              <span className="text-2xl font-semibold text-gray-700">
+                Diaspora African<br/> Forum
+              </span>
             </div>
-          )}
 
-          {/* Footer Note */}
-          <p className="text-xs text-gray-400 mt-8">
-            Available for Android and iOS devices
-          </p>
-        </div>
+            {/* Headline */}
+            <h1 className="text-5xl md:text-7xl font-extrabold leading-tight text-gray-900">
+              Connecting the
+              <span className="block bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
+                African Diaspora
+              </span>
+            </h1>
 
-        {/* RIGHT SIDE (PHONE MOCKUP) */}
-        <div className="flex-1 flex justify-center">
+            {/* Subtitle */}
+            <p className="mt-8 text-xl text-gray-600 max-w-xl leading-relaxed">
+              The official Diaspora African Forum mobile platform designed to
+              connect members of the African diaspora, strengthen community
+              engagement, and support impactful initiatives through
+              communication, events, and secure donations.
+            </p>
 
-          <div className="relative -mt-10">
+            {/* Store Buttons */}
+            <div className="flex flex-wrap gap-6 mt-10">
+
+              <a href={ANDROID_LINK} className="hover:scale-105 transition">
+                <img
+                  src="https://upload.wikimedia.org/wikipedia/commons/7/78/Google_Play_Store_badge_EN.svg"
+                  alt="Google Play"
+                  className="h-16"
+                />
+              </a>
+
+              <a href={IOS_LINK} className="hover:scale-105 transition">
+                <img
+                  src="https://developer.apple.com/assets/elements/badges/download-on-the-app-store.svg"
+                  alt="App Store"
+                  className="h-16"
+                />
+              </a>
+
+            </div>
+
+            {/* Redirect Notice */}
+            {(isAndroid || isIOS) && (
+              <div className="flex items-center gap-2 mt-6 text-sm text-gray-500">
+                <span className="w-2 h-2 bg-green-500 rounded-full animate-ping"></span>
+                Redirecting to your app store in
+                <span className="font-semibold text-indigo-600 ml-1">
+                  {countdown}
+                </span>
+                seconds...
+              </div>
+            )}
+
+            <p className="text-xs text-gray-400 mt-10">
+              Available for Android and iOS devices
+            </p>
+
+          </div>
+
+          {/* RIGHT SIDE */}
+          <div className="flex justify-center relative">
 
             {/* Glow */}
-            <div className="absolute inset-0 bg-gradient-to-tr from-indigo-400 to-purple-400 blur-2xl opacity-20 rounded-3xl"></div>
+            <div className="absolute w-[500px] h-[500px] bg-gradient-to-r from-indigo-400 to-purple-400 blur-3xl opacity-30 rounded-full"></div>
 
-            {/* Screenshot */}
+            {/* Phone Screenshot */}
             <img
               src="/assets/app_screenshot.png"
               alt="DAF App Screenshot"
-              className="relative w-64 md:w-80 lg:w-[500px] rounded-3xl hover:scale-105 transition duration-300"
+              className="relative w-[340px] md:w-[420px] lg:w-[600px] drop-shadow-2xl hover:scale-105 transition duration-300"
             />
 
           </div>
@@ -126,6 +124,7 @@ export default function Download() {
         </div>
 
       </div>
+
     </div>
   );
 }
